@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: text/plain; charset=UTF-8');
 
@@ -15,9 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $bind = @ldap_bind($connection, $directoryServer, $password);
         if ($bind) {
+            session_regenerate_id();
             $_SESSION['auth'] = true;
-            header('Location: index.php');
+
             ldap_close($connection);
+            header('Location: index.php');
             exit;
         }
     }
